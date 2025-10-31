@@ -39,7 +39,7 @@ public class RentBookCommandHandler {
     @Autowired LocationRepository locationRepo;
 
     @Setter
-    @Autowired RentalValidator renterValidators[];
+    @Autowired RentalValidator rentalValidators[];
 
     @Setter
     @Autowired RentalListener rentalListeners[];
@@ -67,7 +67,7 @@ public class RentBookCommandHandler {
 
         // Could also have validators return a status, then map to an exception if we want all
         // validators run regardless of success of others.
-        for (RentalValidator validator : this.renterValidators) {
+        for (RentalValidator validator : Optional.ofNullable(this.rentalValidators).orElse(new RentalValidator[] {})) {
             validator.validateRental(location, renter, book);
         }
 
@@ -81,7 +81,7 @@ public class RentBookCommandHandler {
         if (rentalState.getRenter().equals(Optional.of(renter)) && rentalState.getStatus().equals(RentalStatus.Borrowed)) {
             rentalGranted = true;
 
-            for (RentalListener listener : rentalListeners) {
+            for (RentalListener listener : Optional.ofNullable(rentalListeners).orElse(new RentalListener[] {})) {
                 // Emails and future granted hooks happen here
                 listener.rentalGranted(rentalState);
             }

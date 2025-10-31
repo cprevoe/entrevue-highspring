@@ -2,6 +2,7 @@ package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Rente
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import lombok.Builder;
@@ -22,8 +23,8 @@ public class Renter {
    private String emailAddress;
 
    public long getAge() {
-      Duration age = Duration.between(birthday, LocalDate.now());
-
-      return age.toDays();
+      
+      return ChronoUnit.YEARS.between(birthday, LocalDate.now());
+      
    }
 }

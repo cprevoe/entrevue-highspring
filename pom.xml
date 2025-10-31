@@ -66,7 +66,13 @@
                 <configuration>
                     <includes>
                         <include>**/unit/**/*Test.java</include>
+                        <include>**/RunCucumber.java</include>
                     </includes>
+                    <properties>
+                        <configurationProperties>
+                            cucumber.junit-platform.naming-strategy=surefire
+                        </configurationProperties>
+                    </properties>
                 </configuration>
             </plugin>
             <plugin>
@@ -90,7 +96,24 @@
             </plugin>
         </plugins>
     </build>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-bom</artifactId>
+                <version>7.22.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.12.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
 
         <dependency>
@@ -107,7 +130,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.10.0</version>
+            <version>5.12.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -138,6 +161,27 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <scope>test</scope>
+            <version>7.22.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <scope>test</scope>
+            <version>7.22.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-suite -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>1.12.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

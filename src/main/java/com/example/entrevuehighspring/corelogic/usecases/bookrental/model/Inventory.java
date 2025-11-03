@@ -1,4 +1,4 @@
-package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
+package com.example.entrevuehighspring.corelogic.usecases.bookrental.model;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book.Book;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter.Renter;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.BookNotAvailableException;
 
 import lombok.Builder;

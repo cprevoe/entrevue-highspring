@@ -1,8 +1,11 @@
-package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
+package com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.BookRepository;
 
 import lombok.Builder;
 

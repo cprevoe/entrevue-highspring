@@ -1,4 +1,4 @@
-package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
+package com.example.entrevuehighspring.corelogic.usecases.bookrental.model;
 
 import java.util.UUID;
 

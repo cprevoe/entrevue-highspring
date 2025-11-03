@@ -15,9 +15,9 @@ import org.apache.commons.collections.functors.NotNullPredicate;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.RentRequestDTO;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.RentResponseDTO;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book.Book;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.Location;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter.Renter;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.BookNotAvailableException;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.TooYoungForRentalException;
 

@@ -1,4 +1,4 @@
-package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter;
+package com.example.entrevuehighspring.corelogic.usecases.bookrental.model;
 
 import java.time.Duration;
 import java.time.LocalDate;

@@ -2,7 +2,7 @@ package com.example.entrevuehighspring.corelogic.usecases.bookrental.service.lis
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.RentalState;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.RentalState;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.EmailSender;
 
 public class EmailOnRentalGrantedListener implements RentalListener {

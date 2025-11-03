@@ -1,7 +1,9 @@
-package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
+package com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
 
 /**
  * Repository of known books and how we can interact and track them.

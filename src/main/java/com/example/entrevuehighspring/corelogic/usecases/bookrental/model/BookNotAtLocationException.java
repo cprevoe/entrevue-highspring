@@ -1,4 +1,4 @@
-package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
+package com.example.entrevuehighspring.corelogic.usecases.bookrental.model;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.BookNotAvailableException;
 

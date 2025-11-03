@@ -1,8 +1,6 @@
-package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
+package com.example.entrevuehighspring.corelogic.usecases.bookrental.model;
 
 import java.util.Optional;
-
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter.Renter;
 
 import lombok.Builder;
 import lombok.Getter;

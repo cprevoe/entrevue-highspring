@@ -9,16 +9,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book.Book;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book.BookRepository;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book.InMemBookRepository;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.Inventory;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.Location;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.LocationRepository;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.RentalState;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.RentalStatus;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter.Renter;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter.RenterRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Inventory;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
+
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.RentalState;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.RentalStatus;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.BookRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.LocationRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.RenterRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemBookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.validation.RentalAgeValidator;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.validation.RentalValidator;
 

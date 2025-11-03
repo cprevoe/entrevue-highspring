@@ -1,6 +1,7 @@
 package com.example.entrevuehighspring.corelogic.usecases.bookrental.service;
 
 import static com.example.entrevuehighspring.corelogic.usecases.bookrental.service.RentBookCommandTestHelper.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,6 +31,7 @@ public class StepDefinitions {
     Renter knownRenter;
     Renter knownSecondRenter;
     RentResponseDTO rentalResponse;
+    MockEmailSender emailSender;
 
     Optional<Exception> exception = Optional.empty();
     
@@ -71,10 +73,14 @@ public class StepDefinitions {
           .filter(Objects::nonNull)
           .toArray(Renter[]::new);
 
+        if (this.emailSender == null) {
+            this.emailSender = new MockEmailSender();
+        }
         RentBookCommandHandler rentBookCommandHandler = getRentBookCommandHandler(
             new Book[]     { knownBook },
             knownRenters,
-            new Location[] { location });
+            new Location[] { location },
+            this.emailSender);
            
         try { 
             this.rentalResponse = rentBookCommandHandler.rentRequest(rentRequest);
@@ -130,5 +136,10 @@ public class StepDefinitions {
     @Then("The book was rented successfully")
     public void theBookWasRentedSuccessfully() {
         assertTrue(this.rentalResponse.isRentGranted());
+    }
+
+    @Then("an email was queued")
+    public void anEmailWasQueued() {
+        assertEquals(1, this.emailSender.count);
     }
 }

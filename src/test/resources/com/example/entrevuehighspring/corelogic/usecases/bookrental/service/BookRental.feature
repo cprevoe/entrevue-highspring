@@ -41,3 +41,12 @@ Feature: Book Rental
    When the renter requests to rent the book
    Then there was no exception
     And The book was rented successfully
+
+  Scenario: Locataire éligible + livre disponible -> Email Envoyée
+  Given a known book
+    And a known renter
+    And a location with the known book available
+   When the renter requests to rent the book
+   Then there was no exception
+    And The book was rented successfully
+    And an email was queued

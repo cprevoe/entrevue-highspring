@@ -22,6 +22,8 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemBookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemLocationRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemRenterRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.listeners.EmailOnRentalGrantedListener;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.listeners.RentalListener;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.validation.RentalAgeValidator;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.validation.RentalValidator;
 
@@ -78,7 +80,8 @@ public class RentBookCommandTestHelper {
     public static RentBookCommandHandler getRentBookCommandHandler(
         Book[] knownBooks,
         Renter[] knownRenters,
-        Location[] knownLocations
+        Location[] knownLocations,
+        EmailSender emailSender
     ) {
         return RentBookCommandHandler.builder()
                .bookRepo(getBookRepository(knownBooks))
@@ -86,6 +89,11 @@ public class RentBookCommandTestHelper {
                .renterRepo(getRenterRepository(knownRenters))
                .rentalValidators(new RentalValidator[] {
                     new RentalAgeValidator()
+               })
+               .rentalListeners(new RentalListener[] {
+                    EmailOnRentalGrantedListener.builder()
+                    .emailSender(emailSender)
+                    .build()
                })
                .build();
     }

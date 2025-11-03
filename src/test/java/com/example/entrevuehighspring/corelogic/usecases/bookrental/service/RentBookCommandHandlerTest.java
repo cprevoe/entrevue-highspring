@@ -47,7 +47,8 @@ class RentBookCommandHandlerTest {
         RentBookCommandHandler rentBookCommandHandler = getRentBookCommandHandler(
             new Book[]     { knownBook },
             new Renter[]   { knownRenter },
-            new Location[] { locationWithBookUnavailable });
+            new Location[] { locationWithBookUnavailable },
+            new MockEmailSender());
 
         //  When a known renter requests the known book
 

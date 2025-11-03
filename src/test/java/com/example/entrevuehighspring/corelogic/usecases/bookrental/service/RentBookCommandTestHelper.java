@@ -10,14 +10,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Inventory;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
 
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.RentalState;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.RentalStatus;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.BookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.LocationRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.PhysicalBookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.RenterRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemBookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemLocationRepository;
@@ -81,6 +79,7 @@ public class RentBookCommandTestHelper {
         Book[] knownBooks,
         Renter[] knownRenters,
         Location[] knownLocations,
+        PhysicalBookRepository physicalBookRepo,
         EmailSender emailSender
     ) {
         return RentBookCommandHandler.builder()
@@ -90,6 +89,7 @@ public class RentBookCommandTestHelper {
                .rentalValidators(new RentalValidator[] {
                     new RentalAgeValidator()
                })
+               .physicalBookRepository(physicalBookRepo)
                .rentalListeners(new RentalListener[] {
                     EmailOnRentalGrantedListener.builder()
                     .emailSender(emailSender)
@@ -131,48 +131,9 @@ public class RentBookCommandTestHelper {
     }
 
     /**
-     * Helper method for adding books to an inventory
-     * @param targetMap The inventory map to populate
-     * @param bookList the list of books to add
-     * @param status The status to give each books
-     * @param renter The optoinal renter if the rental status is no Available.
+     * @return A simple predictable location.
      */
-    public static void addBooks(Map<UUID, List<RentalState>> targetMap, Book[] bookList, RentalStatus status, Optional<Renter> renter) {
-
-        for (Book book : bookList) {
-            List<RentalState> bookRentalStates = targetMap.get(book.getId());
-            if (bookRentalStates == null) {
-                bookRentalStates = new LinkedList<>();
-                targetMap.put(book.getId(), bookRentalStates);
-            }
-
-            bookRentalStates.add(
-                RentalState.builder()
-                    .status(status)
-                    .renter(renter)
-                    .build()
-            );
-        }
-    }
-
-    /**
-     * @param availableBooks
-     * @param unavailableBooks
-     * @return Builds a Location with the available books and unavailable books indicated.
-     */
-    public static Location getLocationWithBooks(Book[] availableBooks, Book[] unavailableBooks) {
-
-        Map<UUID, List<RentalState>> rentalStates = new HashMap<>();
-
-        Renter greedyRenter = getGreedyRenter();
-
-        addBooks(rentalStates, availableBooks , RentalStatus.Available, Optional.empty());
-        addBooks(rentalStates, unavailableBooks, RentalStatus.Borrowed, Optional.of(greedyRenter));
-
-        Inventory inventory = Inventory.builder().inventory(rentalStates).build();
-
-        return Location.builder()
-            .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
-            .inventory(inventory).build();
+    public static Location getLocation() {
+        return Location.builder().id(UUID.fromString("00000000-0000-0000-0000-000000000000")).build();
     }
 }

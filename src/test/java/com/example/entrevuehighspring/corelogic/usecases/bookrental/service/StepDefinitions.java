@@ -15,6 +15,8 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.RentResp
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.PhysicalBookRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemPhysicalBookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.BookNotAvailableException;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.TooYoungForRentalException;
 
@@ -32,6 +34,7 @@ public class StepDefinitions {
     Renter knownSecondRenter;
     RentResponseDTO rentalResponse;
     MockEmailSender emailSender;
+    PhysicalBookRepository physicalBookRepository = new InMemPhysicalBookRepository();
 
     Optional<Exception> exception = Optional.empty();
     
@@ -49,14 +52,14 @@ public class StepDefinitions {
 
     @Given("a location with the known book available")
     public void locationWithKnownBookAvailable() {
-        Location location = getLocationWithBooks(new Book[] { this.knownBook }, new Book[0]);
-        this.knownLocation = location;
+        this.knownLocation = getLocation();
+        this.physicalBookRepository.addBook(this.knownLocation, this.knownBook);
     }
 
     @Given("a location with the known book unavailable")
     public void locationWithKnownBookUnavailable() {
-        Location location = getLocationWithBooks(new Book[0], new Book[] { this.knownBook });
-        this.knownLocation = location;
+        locationWithKnownBookAvailable();
+        this.physicalBookRepository.rentFirstAvailable(knownLocation, knownBook, getGreedyRenter());
     }
 
 
@@ -80,6 +83,7 @@ public class StepDefinitions {
             new Book[]     { knownBook },
             knownRenters,
             new Location[] { location },
+            this.physicalBookRepository,
             this.emailSender);
            
         try { 

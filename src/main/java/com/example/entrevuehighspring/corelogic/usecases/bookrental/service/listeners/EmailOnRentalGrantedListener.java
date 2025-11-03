@@ -2,7 +2,7 @@ package com.example.entrevuehighspring.corelogic.usecases.bookrental.service.lis
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.RentalState;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.PhysicalBook;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.EmailSender;
 
 import lombok.Builder;
@@ -22,20 +22,20 @@ public class EmailOnRentalGrantedListener implements RentalListener {
     /**
      * Helper method for generating the subject of the email.
      * 
-     * @param rentalState The RentalState this email is concerning.
+     * @param physicalBook The physical book this email is concerning.
      * @return A subject for the email which will be sent. Could be localized here.
      */
-    private String generateSubject(RentalState rentalState) {
+    private String generateSubject(PhysicalBook physicalBook) {
         return "Reasonable Subject Goes Here";
     }
 
 
     /**
      * Helper method for generating the email body of the email
-     * @param rentalState The RentalState this email is concerning.
+     * @param PhysicalBook The PhysicalBook this email is concerning.
      * @return The body of the email which will be sent. Could also be localized here.
      */
-    private String generateEmailBody(RentalState rentalState) {
+    private String generateEmailBody(PhysicalBook physicalBook) {
         return "This is where you'd likely have a templating service or something to generate the body of the email.";
     }
 
@@ -43,10 +43,10 @@ public class EmailOnRentalGrantedListener implements RentalListener {
     /**
      * Hook method which queues an email to be sent when the rental is granted
      */
-    public void rentalGranted(RentalState rentalState) {
+    public void rentalGranted(PhysicalBook physicalBook) {
         // Note: This should always be populated when the rental was granted.
-        String toAddress = rentalState.getRenter().get().getEmailAddress();
+        String toAddress = physicalBook.getRentedBy().get().getEmailAddress();
 
-        emailSender.sendEmail(toAddress, generateSubject(rentalState) , generateEmailBody(rentalState));
+        emailSender.sendEmail(toAddress, generateSubject(physicalBook) , generateEmailBody(physicalBook));
     };
 }

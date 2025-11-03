@@ -9,11 +9,11 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.RentRequ
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.RentResponseDTO;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.RentalState;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.RentalStatus;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.PhysicalBook;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.BookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.LocationRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.PhysicalBookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.RenterRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.BookDoesNotExistException;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.BookNotAvailableException;
@@ -35,11 +35,14 @@ public class RentBookCommandHandler {
     /** Repository of known renters. */
     @Setter @Autowired RenterRepository renterRepo;
 
-    /** Repository of known books. */
+    /** Repository of known books (essentially book types). */
     @Setter @Autowired BookRepository bookRepo;
     
     /** Repository of known locations. */
     @Setter @Autowired LocationRepository locationRepo;
+
+    /** Repository of physical books */
+    @Setter @Autowired PhysicalBookRepository physicalBookRepository;
 
     /** Rental request validators. */
     @Setter @Autowired RentalValidator rentalValidators[];
@@ -87,21 +90,16 @@ public class RentBookCommandHandler {
         // At this point, the request is validated and the renter is permitted to rent the book.
         // We do not know if the book is available, we will effect the rent in the model to avoid
         // timing issues
-        RentalState rentalState = location.rent(renter, book);
-
-        // Read the results to see if the model was successful (otherwise we would have thrown an exception)
-        boolean rentalGranted = false;
-        if (rentalState.getRenter().equals(Optional.of(renter)) && rentalState.getStatus().equals(RentalStatus.Borrowed)) {
-            rentalGranted = true;
-
-            for (RentalListener listener : Optional.ofNullable(rentalListeners).orElse(new RentalListener[] {})) {
-                // Emails and future granted hooks happen here
-                listener.rentalGranted(rentalState);
-            }
-
+        PhysicalBook physicalBook = physicalBookRepository
+                                        .rentFirstAvailable(location, book, renter)
+                                        .orElseThrow(() -> new BookNotAvailableException());
+        
+        for (RentalListener listener : Optional.ofNullable(rentalListeners).orElse(new RentalListener[] {})) {
+            // Emails and future granted hooks happen here
+            listener.rentalGranted(physicalBook);
         }
 
-        RentResponseDTO result = RentResponseDTO.builder().isRentGranted(rentalGranted).build();
+        RentResponseDTO result = RentResponseDTO.builder().isRentGranted(true).build();
 
         return result;
     }

@@ -6,6 +6,9 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.RentRequ
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.PhysicalBookRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemBookRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemPhysicalBookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.BookNotAvailableException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,13 +44,19 @@ class RentBookCommandHandlerTest {
 
         Book knownBook = getBook();
         Renter knownRenter = getRenter();
+        Location location = getLocation();
+        PhysicalBookRepository physicalBookRepository = new InMemPhysicalBookRepository();
 
-        Location locationWithBookUnavailable = getLocationWithBooks(new Book[] {}, new Book[] { knownBook });
+        // Add the book
+        physicalBookRepository.addBook(location, knownBook);
+        // The greedy renter has rented it already.
+        physicalBookRepository.rentFirstAvailable(location, knownBook, getGreedyRenter());
 
         RentBookCommandHandler rentBookCommandHandler = getRentBookCommandHandler(
             new Book[]     { knownBook },
             new Renter[]   { knownRenter },
-            new Location[] { locationWithBookUnavailable },
+            new Location[] { location },
+            physicalBookRepository,
             new MockEmailSender());
 
         //  When a known renter requests the known book
@@ -55,7 +64,7 @@ class RentBookCommandHandlerTest {
         RentRequestDTO rentRequest = RentRequestDTO.builder()
             .bookId(knownBook.getId())
             .renterId(knownRenter.getId())
-            .locationId(locationWithBookUnavailable.getId())
+            .locationId(location.getId())
             .build();
 
         Optional<Exception> exception = Optional.empty();

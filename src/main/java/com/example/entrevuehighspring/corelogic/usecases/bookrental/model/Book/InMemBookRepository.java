@@ -6,8 +6,15 @@ import java.util.UUID;
 
 import lombok.Builder;
 
+/**
+ * Implementation of {@link BookRepository}
+ *
+ * @see BookRepository
+ */
 @Builder
 public class InMemBookRepository implements BookRepository {
+
+    // The in-memory structure holding all of our konwn books.
     private Map<UUID, Book> bookCatalogue;
 
     public Optional<Book> getBookById(UUID bookId) {
@@ -18,4 +25,5 @@ public class InMemBookRepository implements BookRepository {
         bookCatalogue.put(book.getId(), book);
         return Optional.of(book);
     }
+
 }

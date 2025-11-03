@@ -88,7 +88,7 @@ public class RentBookCommandHandler {
 
         }
 
-        RentResponseDTO result = RentResponseDTO.builder().isRentPermitted(rentalGranted).build();
+        RentResponseDTO result = RentResponseDTO.builder().isRentGranted(rentalGranted).build();
 
         return result;
     }

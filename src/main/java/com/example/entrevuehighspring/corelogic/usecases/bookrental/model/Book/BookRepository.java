@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The abstract interface to our backing store of choice.
+ * Repository of known books and how we can interact and track them.
  */
 public interface BookRepository {
 

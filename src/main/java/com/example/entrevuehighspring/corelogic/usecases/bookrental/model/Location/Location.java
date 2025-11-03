@@ -14,8 +14,6 @@ import lombok.Setter;
 public class Location {
     private UUID id;
 
-    private String address;
-
     private Inventory inventory;
 
     public RentalState rent(Renter renter, Book book) throws BookNotAvailableException {

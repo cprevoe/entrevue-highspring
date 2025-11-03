@@ -130,6 +130,6 @@ public class StepDefinitions {
 
     @Then("The book was rented successfully")
     public void the_book_was_rented_successfully() {
-        assertTrue(this.rentalResponse.isRentPermitted());
+        assertTrue(this.rentalResponse.isRentGranted());
     }
 }

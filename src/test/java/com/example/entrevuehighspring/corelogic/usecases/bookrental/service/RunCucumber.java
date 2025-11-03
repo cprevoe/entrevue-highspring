@@ -4,9 +4,11 @@ import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
 
-import static io.cucumber.junit.platform.engine.Constants.FEATURES_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 
+/**
+ * Simple runner which results in BookRental.feature being run.
+ */
 @Suite
 @SelectPackages("com.example.entrevuehighspring.corelogic.usecases.bookrental.service")
 @ConfigurationParameter(
@@ -14,4 +16,5 @@ import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
    value = "com.example.entrevuehighspring.corelogic.usecases.bookrental.service"
 )
 public class RunCucumber {
+   // The magic is in the annotations.
 }

@@ -6,12 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import org.apache.commons.collections.functors.NotNullPredicate;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.RentRequestDTO;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.RentResponseDTO;
@@ -25,6 +21,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+/**
+ * Definition of Steps used by cucumber/ghirkin tests.
+ */
 public class StepDefinitions {
     Book knownBook;
     Location knownLocation;
@@ -124,12 +123,12 @@ public class StepDefinitions {
     }
 
     @Then("there was no exception")
-    public void there_was_no_exception() {
+    public void thereWasNoException() {
         assertTrue(this.exception.isEmpty());
     }
 
     @Then("The book was rented successfully")
-    public void the_book_was_rented_successfully() {
+    public void theBookWasRentedSuccessfully() {
         assertTrue(this.rentalResponse.isRentGranted());
     }
 }

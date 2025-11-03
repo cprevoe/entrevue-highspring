@@ -25,8 +25,15 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.validation.RentalAgeValidator;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.validation.RentalValidator;
 
+/**
+ * Collection of object builders for quick testing
+ */
 public class RentBookCommandTestHelper {
     
+    /**
+     * @param knownBooks
+     * @return a BookRepository which knows the books provided.
+     */
     public static BookRepository getBookRepository(Book[] knownBooks) {
         Map<UUID, Book> bookCatalog = new HashMap<>();
         Arrays.stream(knownBooks).forEach((Book book) -> bookCatalog.put(book.getId(),book));
@@ -35,6 +42,10 @@ public class RentBookCommandTestHelper {
           .build();
     }
 
+    /**
+     * @param knownRenters
+     * @return A RenterRepository which knows the renters provided.
+     */
     public static RenterRepository getRenterRepository(Renter[] knownRenters) {
         Map<UUID, Renter> renterCatalog = new HashMap<>();
         Arrays.stream(knownRenters).forEach((Renter renter) -> renterCatalog.put(renter.getId(), renter));
@@ -44,6 +55,10 @@ public class RentBookCommandTestHelper {
           .renters(renterCatalog).build();
     }
 
+    /**
+     * @param knownLocations
+     * @return LocationRepository with the known locations provided.
+     */
     public static LocationRepository getLocationRepository(Location[] knownLocations) {
         Map<UUID, Location> locationCatalog = new HashMap<>();
         Arrays.stream(knownLocations).forEach((Location location) -> locationCatalog.put(location.getId(), location));
@@ -54,6 +69,12 @@ public class RentBookCommandTestHelper {
           .build();
     }
 
+    /**
+     * @param knownBooks
+     * @param knownRenters
+     * @param knownLocations
+     * @return A RentBookCommandHandler configured with the books, renters, and locations provided
+     */
     public static RentBookCommandHandler getRentBookCommandHandler(
         Book[] knownBooks,
         Renter[] knownRenters,
@@ -69,6 +90,9 @@ public class RentBookCommandTestHelper {
                .build();
     }
 
+    /**
+     * @return A simple book
+     */
     public static Book getBook() {
         return Book.builder()
             .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
@@ -78,6 +102,9 @@ public class RentBookCommandTestHelper {
             .build();
     }
 
+    /**
+     * @return A simple predictable renter
+     */
     public static Renter getRenter() {
         return Renter.builder()
             .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
@@ -86,12 +113,22 @@ public class RentBookCommandTestHelper {
             .build();
     }
 
+    /**
+     * @return A second predictable renter distinct from the first.
+     */
     public static Renter getGreedyRenter() {
         Renter result = getRenter();
         result.setId(UUID.fromString("99999999-9999-9999-9999-999999999999"));
         return result;
     }
 
+    /**
+     * Helper method for adding books to an inventory
+     * @param targetMap The inventory map to populate
+     * @param bookList the list of books to add
+     * @param status The status to give each books
+     * @param renter The optoinal renter if the rental status is no Available.
+     */
     public static void addBooks(Map<UUID, List<RentalState>> targetMap, Book[] bookList, RentalStatus status, Optional<Renter> renter) {
 
         for (Book book : bookList) {
@@ -110,6 +147,11 @@ public class RentBookCommandTestHelper {
         }
     }
 
+    /**
+     * @param availableBooks
+     * @param unavailableBooks
+     * @return Builds a Location with the available books and unavailable books indicated.
+     */
     public static Location getLocationWithBooks(Book[] availableBooks, Book[] unavailableBooks) {
 
         Map<UUID, List<RentalState>> rentalStates = new HashMap<>();

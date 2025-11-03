@@ -8,6 +8,11 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Renter
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.RentalValidationException;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.exception.TooYoungForRentalException;
 
+/**
+ * A RentalValidator which validates that the book in question is age appropriate.
+ * 
+ * @see RentalValidator
+ */
 @Component
 public class RentalAgeValidator implements RentalValidator {
     @Override

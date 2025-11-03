@@ -26,24 +26,37 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.vali
 import lombok.Builder;
 import lombok.Setter;
 
+/**
+ * Service for renting books
+ */
 @Builder
 public class RentBookCommandHandler {
     
-    @Setter
-    @Autowired RenterRepository renterRepo;
+    /** Repository of known renters. */
+    @Setter @Autowired RenterRepository renterRepo;
 
-    @Setter
-    @Autowired BookRepository bookRepo;
+    /** Repository of known books. */
+    @Setter @Autowired BookRepository bookRepo;
     
-    @Setter
-    @Autowired LocationRepository locationRepo;
+    /** Repository of known locations. */
+    @Setter @Autowired LocationRepository locationRepo;
 
-    @Setter
-    @Autowired RentalValidator rentalValidators[];
+    /** Rental request validators. */
+    @Setter @Autowired RentalValidator rentalValidators[];
 
-    @Setter
-    @Autowired RentalListener rentalListeners[];
+    /** Rental Event Listeners */
+    @Setter @Autowired RentalListener rentalListeners[];
 
+    /**
+     * Fields a request for a renter to rent a specified book from a specified location
+     * @param rentRequest The request details
+     * @return A response to the request indicating if the request was granted
+     * @throws RenterDoesNotExistException If the renter indicated does not exist
+     * @throws BookDoesNotExistException If the book indicated does not exist
+     * @throws LocationDoesNotExistException If the location indicated does not exist
+     * @throws BookNotAvailableException If the book is not available
+     * @throws RentalValidationException If one of the rental rules was unable to validate this request
+     */
     public RentResponseDTO rentRequest(RentRequestDTO rentRequest) 
         throws RenterDoesNotExistException, 
                BookDoesNotExistException, 

@@ -17,15 +17,17 @@ import lombok.Builder;
 @Builder
 public class InMemBookRepository implements BookRepository {
 
-    // The in-memory structure holding all of our konwn books.
-    private Map<UUID, Book> bookCatalogue;
+    /**
+     * The in-memory backing store of our book catalog indexed by ID.
+     */
+    private Map<UUID, Book> bookCatalog;
 
     public Optional<Book> getBookById(UUID bookId) {
-        return Optional.ofNullable(bookCatalogue.get(bookId));
+        return Optional.ofNullable(bookCatalog.get(bookId));
     }
 
     public Optional<Book> addBook(Book book) {
-        bookCatalogue.put(book.getId(), book);
+        bookCatalog.put(book.getId(), book);
         return Optional.of(book);
     }
 

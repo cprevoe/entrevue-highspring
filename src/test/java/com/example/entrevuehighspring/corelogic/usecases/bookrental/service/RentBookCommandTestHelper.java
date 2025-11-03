@@ -31,7 +31,7 @@ public class RentBookCommandTestHelper {
         Map<UUID, Book> bookCatalog = new HashMap<>();
         Arrays.stream(knownBooks).forEach((Book book) -> bookCatalog.put(book.getId(),book));
         return InMemBookRepository.builder()
-          .bookCatalogue(bookCatalog)
+          .bookCatalog(bookCatalog)
           .build();
     }
 

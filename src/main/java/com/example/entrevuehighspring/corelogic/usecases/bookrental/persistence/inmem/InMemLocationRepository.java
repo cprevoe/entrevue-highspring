@@ -10,8 +10,17 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.
 
 import lombok.Builder;
 
+/**
+ * Implementation of {@link LocationRepository}
+ * 
+ * @see LocationRepository
+ */
 @Builder
 public class InMemLocationRepository implements LocationRepository {
+
+    /**
+     * The in-memory backing store for our locations indexed by ID.
+     */
     @Builder.Default
     private Map<UUID, Location> locations = new HashMap<UUID, Location>();
 

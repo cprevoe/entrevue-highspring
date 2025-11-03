@@ -9,8 +9,17 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.
 
 import lombok.Builder;
 
+/**
+ * Implementation of {@link RenterRepository}
+ * 
+ * @see RenterRepository
+ */
 @Builder
 public class InMemRenterRepository implements RenterRepository {
+
+    /**
+     * The in-memory backing store of our known renters indexed by ID
+     */
     private Map<UUID, Renter> renters;
 
     public Optional<Renter> getRenterById(UUID renterId) {

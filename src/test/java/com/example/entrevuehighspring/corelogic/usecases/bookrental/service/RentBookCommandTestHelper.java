@@ -104,8 +104,6 @@ public class RentBookCommandTestHelper {
     public static Book getBook() {
         return Book.builder()
             .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
-            .authors(new String[] {"That Famous Author", "That Authors Mentor"})
-            .title("That book that never was")
             .minAge(18)
             .build();
     }

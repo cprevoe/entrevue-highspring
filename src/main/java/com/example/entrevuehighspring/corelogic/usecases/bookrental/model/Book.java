@@ -20,16 +20,6 @@ public class Book {
     private UUID id;
 
     /**
-     * The title of the book
-     */
-    private String title;
-
-    /**
-     * The authors of the book
-     */
-    private String authors[];
-
-    /**
      * The recommended minimum age required to read this book.
      */
     private int minAge;

@@ -1,21 +1,22 @@
 package com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import lombok.Builder;
+/**
+ * The abstract interface to our backing store of choice.
+ */
+public interface BookRepository {
 
-@Builder
-public class BookRepository {
-    private Map<UUID, Book> bookCatalogue;
+    /**
+     * @param bookId The ID of the book of interest.
+     * @return The details of the type of book.
+     */
+    public Optional<Book> getBookById(UUID bookId);
 
-    public Optional<Book> getBookById(UUID bookId) {
-        return Optional.ofNullable(bookCatalogue.get(bookId));
-    }
-
-    public Optional<Book> addBook(Book book) {
-        bookCatalogue.put(book.getId(), book);
-        return Optional.of(book);
-    }
+    /**
+     * @param Book the book to add
+     * @return The book added to the backing store which may or may not be the same book.
+     */
+    public Optional<Book> addBook(Book book);
 }

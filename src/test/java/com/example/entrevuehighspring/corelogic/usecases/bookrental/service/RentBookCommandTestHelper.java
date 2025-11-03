@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book.Book;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book.BookRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Book.InMemBookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.Inventory;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.Location;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.model.Location.LocationRepository;
@@ -26,7 +27,7 @@ public class RentBookCommandTestHelper {
     public static BookRepository getBookRepository(Book[] knownBooks) {
         Map<UUID, Book> bookCatalog = new HashMap<>();
         Arrays.stream(knownBooks).forEach((Book book) -> bookCatalog.put(book.getId(),book));
-        return BookRepository.builder()
+        return InMemBookRepository.builder()
           .bookCatalogue(bookCatalog)
           .build();
     }

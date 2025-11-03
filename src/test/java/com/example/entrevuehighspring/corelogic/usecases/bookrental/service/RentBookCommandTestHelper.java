@@ -20,6 +20,8 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.LocationRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.RenterRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemBookRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemLocationRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.persistence.inmem.InMemRenterRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.validation.RentalAgeValidator;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.service.validation.RentalValidator;
 
@@ -37,7 +39,7 @@ public class RentBookCommandTestHelper {
         Map<UUID, Renter> renterCatalog = new HashMap<>();
         Arrays.stream(knownRenters).forEach((Renter renter) -> renterCatalog.put(renter.getId(), renter));
 
-        return RenterRepository
+        return InMemRenterRepository
           .builder()
           .renters(renterCatalog).build();
     }
@@ -46,7 +48,7 @@ public class RentBookCommandTestHelper {
         Map<UUID, Location> locationCatalog = new HashMap<>();
         Arrays.stream(knownLocations).forEach((Location location) -> locationCatalog.put(location.getId(), location));
 
-        return LocationRepository
+        return InMemLocationRepository
           .builder()
           .locations(locationCatalog)
           .build();

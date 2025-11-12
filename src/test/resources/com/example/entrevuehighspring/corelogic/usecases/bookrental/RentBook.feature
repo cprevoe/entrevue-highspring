@@ -24,5 +24,5 @@ Scenario: Un adult locataire demande à louer un livre pas disponible à un endr
     And un livre connu
     And le livre n'est pas disponible
    When le locataire demande à louer le livre à l'endroit indiqué
-   Then le livre n'est plus disponible
-    And la réponse indique que le demande était accordée
+   Then il y a un exception
+    And l'exception est un BookNotAvailableException

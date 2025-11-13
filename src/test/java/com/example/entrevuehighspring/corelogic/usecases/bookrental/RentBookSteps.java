@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.RentBookTestContext.RentBookTestContextBuilder;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.BookNotAvailableException;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.TooYoungForRentalException;
 import com.example.entrevuehighspring.domain.BookId;
 import com.example.entrevuehighspring.domain.LocationId;

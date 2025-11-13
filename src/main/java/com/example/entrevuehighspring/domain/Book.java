@@ -1,6 +1,6 @@
 package com.example.entrevuehighspring.domain;
 
-public interface Book {
+public interface Book extends Rentable {
 
     BookType getType();
 

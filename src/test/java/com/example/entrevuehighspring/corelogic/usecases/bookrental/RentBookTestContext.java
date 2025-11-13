@@ -5,22 +5,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.BookRentalRequestDto;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.BookRentalResponseDto;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.event.EmailOnRentalRequestListener;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.BookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.LocationRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.MockBookRepository;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.MockRentableRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.MockUserRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.UserRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.AvailabilityValidator;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.BookNotAvailableException;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.RentalRequestAgeValidator;
 import com.example.entrevuehighspring.domain.Book;
 import com.example.entrevuehighspring.domain.BookId;
 import com.example.entrevuehighspring.domain.Location;
+import com.example.entrevuehighspring.domain.LocationId;
 import com.example.entrevuehighspring.domain.MockBook;
 import com.example.entrevuehighspring.domain.MockLocation;
-import com.example.entrevuehighspring.domain.MockRentableInventory;
 import com.example.entrevuehighspring.domain.MockRentableState;
 import com.example.entrevuehighspring.domain.MockUser;
 import com.example.entrevuehighspring.domain.RentableState;
@@ -37,10 +40,13 @@ public class RentBookTestContext {
     @Getter private MockBook knownBook;
 
     @Builder.Default
-    private boolean isBookAvailable = true;
+    private MockLocation otherLocation = MockLocation.builder().id(LocationId.builder().id(UUID.randomUUID()).build()).build();
 
     @Builder.Default
-    private Optional<MockRentableRepository> rentableRepository = Optional.empty();
+    private boolean isBookAvailable = true;
+    
+    @Builder.Default
+    private boolean isBookAtKnownLocation = true;
 
     @Builder.Default
     private Optional<BookRentalResponseDto> response = Optional.empty();
@@ -48,33 +54,18 @@ public class RentBookTestContext {
     @Builder.Default
     private Optional<Exception> exception = Optional.empty();
 
-    private MockRentableRepository getRentableRepository() {
-        if (rentableRepository.isEmpty()) {
-            rentableRepository = Optional.of(new MockRentableRepository());
-            if (knownBook != null && knownLocation != null) {
-                rentableRepository.get().addRentableState(
-                    knownLocation, 
-                    knownBook, 
-                    MockRentableState.builder()
-                        .rentable(knownBook)
-                        .status(this.isBookAvailable ? RentableStatus.AVAILABLE : RentableStatus.BORROWED)
-                        .build());
-            }
-        }
-
-        return rentableRepository.get();
-    }
-
     public RentBookCommandHandler getHandler() {
          return RentBookCommandHandler.builder()
-            .rentableInventory(
-                MockRentableInventory.builder()
-                    .rentableRepository(getRentableRepository())
-                    .build())
             .userRepository(getUserRepository())
             .bookRepository(getBookRepository())
             .locationRepository(getLocationRepository())
-            .rentalRequestValidators(new LinkedList<>(Arrays.asList(new RentalRequestAgeValidator())))
+            .rentalRequestValidators(new LinkedList<>(Arrays.asList(
+                new RentalRequestAgeValidator(),
+                new AvailabilityValidator()
+            )))
+            .rentalRequestListeners(new LinkedList<>(Arrays.asList(
+                new EmailOnRentalRequestListener()
+            )))
             .build(); 
     }
 
@@ -89,7 +80,15 @@ public class RentBookTestContext {
 
     private BookRepository getBookRepository() {
         MockBookRepository bookRepository = new MockBookRepository();
-        if (this.knownBook != null) { 
+        if (this.knownBook != null) {
+            MockRentableState rentableState = MockRentableState.builder()
+                .rentable(this.knownBook)
+                .borrower(Optional.empty())
+                .status(this.isBookAvailable ? RentableStatus.AVAILABLE : RentableStatus.BORROWED)
+                .build();
+
+            this.knownBook.setLocation(this.isBookAtKnownLocation ? this.knownLocation : this.otherLocation);
+            this.knownBook.setState(rentableState);
             bookRepository.addBook(this.knownBook);
         }
         return bookRepository;
@@ -148,9 +147,18 @@ public class RentBookTestContext {
     }
 
     public void assertKnownBookIsNotAvailableAtKnownLocation() {
-        Optional<RentableState> state = getRentableRepository().getRentableStateAtLocation(this.knownLocation, this.knownBook);
-        assertThat(state.isPresent()).isTrue();
-        assertThat(state.get().getStatus()).isNotEqualTo(RentableStatus.AVAILABLE);
+        BookNotAvailableException bookNotAvailableException= null;
+
+        try {
+            new AvailabilityValidator().validate(knownUser, knownBook, knownLocation);
+        } catch (BookNotAvailableException e) {
+            bookNotAvailableException = e;
+        } catch (Exception e) {
+            // Rethrow any other unexpected exceptions.
+            throw new RuntimeException("Unexpected!", e);
+        }
+
+        assertThat(bookNotAvailableException).isNotNull();
     }
 
 }

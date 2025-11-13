@@ -1,5 +1,7 @@
 package com.example.entrevuehighspring.corelogic.usecases.bookrental;
 
+import static org.mockito.Mockito.after;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,14 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.BookRentalRequestDto;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.dto.BookRentalResponseDto;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.event.RentalRequestListener;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.BookRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.LocationRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.UserRepository;
+import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.BookNotAvailableException;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.RentalRequestValidator;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.RentalValidationException;
 import com.example.entrevuehighspring.domain.Book;
 import com.example.entrevuehighspring.domain.Location;
-import com.example.entrevuehighspring.domain.RentableInventory;
 import com.example.entrevuehighspring.domain.User;
 
 import lombok.Builder;
@@ -23,7 +26,6 @@ import lombok.Builder;
 public class RentBookCommandHandler {
 
     @Autowired
-    private RentableInventory rentableInventory;
     private UserRepository userRepository;
     private BookRepository bookRepository;
     private LocationRepository locationRepository;
@@ -31,6 +33,10 @@ public class RentBookCommandHandler {
     @Autowired
     @Builder.Default
     private List<RentalRequestValidator> rentalRequestValidators = new LinkedList<>();
+    
+    @Autowired
+    @Builder.Default
+    private List<RentalRequestListener> rentalRequestListeners = new LinkedList<>();
 
     public BookRentalResponseDto requestToRentBook(BookRentalRequestDto request) 
             throws BookNotAvailableException, 
@@ -43,8 +49,14 @@ public class RentBookCommandHandler {
 
         for (RentalRequestValidator rentalRequestValidator : this.rentalRequestValidators) {
             rentalRequestValidator.validate(user, book, location);
-        } 
+        }
 
-        return BookRentalResponseDto.builder().granted(false).build();
+        book.rentTo(user);
+
+        for (RentalRequestListener listener : this.rentalRequestListeners) {
+            listener.handleBookLoanedEvent(book);
+        }
+
+        return BookRentalResponseDto.builder().granted(true).build();
     }
 }

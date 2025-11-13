@@ -4,10 +4,11 @@ import java.util.Optional;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 public class MockRentableState implements RentableState {
-    @Getter private Rentable rentable;
-    @Getter private RentableStatus status;
-    @Getter private Optional<User> borrower;
+    @Getter @Setter private Rentable rentable;
+    @Getter @Setter private RentableStatus status;
+    @Getter @Setter private Optional<User> borrower;
 }

@@ -1,18 +1,11 @@
 package com.example.entrevuehighspring.domain;
 
-import lombok.Builder;
-import lombok.Getter;
+public interface Book {
 
-@Builder
-public class Book implements Rentable {
-    @Getter private BookId id;
-    @Getter private BookType type;
+    BookType getType();
 
-    @Builder.Default
-    @Getter private int minAge = 0;
+    int getMinAge();
 
-    @Override
-    public RentableId getId() {
-        return id;
-    }
+    RentableId getId();
+
 }

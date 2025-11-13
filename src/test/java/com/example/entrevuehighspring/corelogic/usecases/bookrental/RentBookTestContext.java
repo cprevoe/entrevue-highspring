@@ -18,8 +18,13 @@ import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.Re
 import com.example.entrevuehighspring.domain.Book;
 import com.example.entrevuehighspring.domain.BookId;
 import com.example.entrevuehighspring.domain.Location;
-import com.example.entrevuehighspring.domain.RentableInventory;
+import com.example.entrevuehighspring.domain.MockBook;
+import com.example.entrevuehighspring.domain.MockLocation;
+import com.example.entrevuehighspring.domain.MockRentableInventory;
+import com.example.entrevuehighspring.domain.MockRentableState;
+import com.example.entrevuehighspring.domain.MockUser;
 import com.example.entrevuehighspring.domain.RentableState;
+import com.example.entrevuehighspring.domain.RentableStatus;
 import com.example.entrevuehighspring.domain.User;
 
 import lombok.Builder;
@@ -27,9 +32,9 @@ import lombok.Getter;
 
 @Builder
 public class RentBookTestContext {
-    @Getter private User knownUser;
-    @Getter private Location knownLocation;
-    @Getter private Book knownBook;
+    @Getter private MockUser knownUser;
+    @Getter private MockLocation knownLocation;
+    @Getter private MockBook knownBook;
 
     @Builder.Default
     private boolean isBookAvailable = true;
@@ -50,9 +55,9 @@ public class RentBookTestContext {
                 rentableRepository.get().addRentableState(
                     knownLocation, 
                     knownBook, 
-                    RentableState.builder()
+                    MockRentableState.builder()
                         .rentable(knownBook)
-                        .status(this.isBookAvailable ? RentableState.Status.AVAILABLE : RentableState.Status.BORROWED)
+                        .status(this.isBookAvailable ? RentableStatus.AVAILABLE : RentableStatus.BORROWED)
                         .build());
             }
         }
@@ -63,7 +68,7 @@ public class RentBookTestContext {
     public RentBookCommandHandler getHandler() {
          return RentBookCommandHandler.builder()
             .rentableInventory(
-                RentableInventory.builder()
+                MockRentableInventory.builder()
                     .rentableRepository(getRentableRepository())
                     .build())
             .userRepository(getUserRepository())
@@ -145,7 +150,7 @@ public class RentBookTestContext {
     public void assertKnownBookIsNotAvailableAtKnownLocation() {
         Optional<RentableState> state = getRentableRepository().getRentableStateAtLocation(this.knownLocation, this.knownBook);
         assertThat(state.isPresent()).isTrue();
-        assertThat(state.get().getStatus()).isNotEqualTo(RentableState.Status.AVAILABLE);
+        assertThat(state.get().getStatus()).isNotEqualTo(RentableStatus.AVAILABLE);
     }
 
 }

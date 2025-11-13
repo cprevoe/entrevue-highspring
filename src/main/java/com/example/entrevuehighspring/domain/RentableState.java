@@ -1,15 +1,13 @@
 package com.example.entrevuehighspring.domain;
 
-import lombok.Builder;
-import lombok.Getter;
+import java.util.Optional;
 
-@Builder
-public class RentableState {
-    public static enum Status {
-        AVAILABLE,
-        BORROWED
-    };
+public interface RentableState {
 
-    @Getter private Rentable rentable;
-    @Getter private Status status;   
+    Rentable getRentable();
+
+    RentableStatus getStatus();
+
+    Optional<User> getBorrower();
+
 }

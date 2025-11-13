@@ -1,9 +1,7 @@
 package com.example.entrevuehighspring.domain;
 
-import lombok.Builder;
-import lombok.Getter;
+public interface Location {
 
-@Builder
-public class Location {
-    @Getter private LocationId id;
+    LocationId getId();
+
 }

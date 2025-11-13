@@ -14,7 +14,7 @@ public class UserTest {
     }
 
     private User getUserWithBirthday(int year, int month, int day) {
-        return User.builder().birthday(LocalDate.of(year, month, day)).id(getUserId()).build();
+        return MockUser.builder().birthday(LocalDate.of(year, month, day)).id(getUserId()).build();
     }
 
     @Test
@@ -43,7 +43,7 @@ public class UserTest {
 
     @Test
     void testGetAgeBornLastYearTomorrow() {
-          // Given a user who was born exactly one year ago tomorrow
+        // Given a user who was born exactly one year ago tomorrow
         LocalDate birthdate = LocalDate.now().plusDays(1).minusYears(1);
         User user = getUserWithBirthday(birthdate.getYear(), birthdate.getMonthValue(), birthdate.getDayOfMonth());
 
@@ -51,5 +51,17 @@ public class UserTest {
         // Then their age is 0
         assertThat(user.getAge())
             .isEqualTo(0);
+    }
+
+    @Test
+    void testGetBorn18YearsAgo() {
+        // Given a user who was born exactly one year ago tomorrow
+        LocalDate birthdate = LocalDate.now().minusYears(18);
+        User user = getUserWithBirthday(birthdate.getYear(), birthdate.getMonthValue(), birthdate.getDayOfMonth());
+
+        // When we check their age
+        // Then their age is 0
+        assertThat(user.getAge())
+            .isEqualTo(18);
     }
 }

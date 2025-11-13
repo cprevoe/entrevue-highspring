@@ -7,13 +7,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.RentBookTestContext.RentBookTestContextBuilder;
-import com.example.entrevuehighspring.corelogic.usecases.bookrental.port.MockRentableRepository;
 import com.example.entrevuehighspring.corelogic.usecases.bookrental.validator.TooYoungForRentalException;
-import com.example.entrevuehighspring.domain.Book;
 import com.example.entrevuehighspring.domain.BookId;
-import com.example.entrevuehighspring.domain.Location;
 import com.example.entrevuehighspring.domain.LocationId;
-import com.example.entrevuehighspring.domain.User;
+import com.example.entrevuehighspring.domain.MockBook;
+import com.example.entrevuehighspring.domain.MockLocation;
+import com.example.entrevuehighspring.domain.MockUser;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -37,7 +36,7 @@ public class RentBookSteps {
     @Given("un enfant locataire connu")
     public void knownChildRenter() {
         rentBookTestContextBuilder.knownUser(
-            User.builder()
+            MockUser.builder()
                 .birthday(LocalDate.now())
                 .build());
     }
@@ -45,7 +44,7 @@ public class RentBookSteps {
     @Given("un adult locataire connu")
     public void knownAdultRenter() {
         rentBookTestContextBuilder.knownUser(
-            User.builder()
+            MockUser.builder()
                 .birthday(LocalDate.now().minusYears(18))
                 .build());
     }
@@ -53,7 +52,7 @@ public class RentBookSteps {
     @And("un location connu")
     public void knownLocation() {
         rentBookTestContextBuilder.knownLocation(
-            Location.builder()
+            MockLocation.builder()
                     .id(LocationId.builder().id(UUID.randomUUID()).build())
                     .build());
     }
@@ -61,7 +60,7 @@ public class RentBookSteps {
     @And("un livre connu")
     public void aKnownBook() {
         rentBookTestContextBuilder.knownBook(
-            Book.builder()
+            MockBook.builder()
                 .id(BookId.builder()
                     .id(UUID.randomUUID())
                     .build())
@@ -71,7 +70,7 @@ public class RentBookSteps {
     @And("un livre pour les adults connu")
     public void aBookForAdults() {
         rentBookTestContextBuilder.knownBook(
-            Book.builder()
+            MockBook.builder()
                 .id(BookId.builder().id(UUID.randomUUID()).build())
                 .minAge(18)
                 .build()
